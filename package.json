@@ -1,0 +1,24 @@
+{
+  "name": "fill-pdf",
+  "version": "0.0.1",
+  "description": "Fill out pdf forms",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dommmel/fill-pdf"
+  },
+  "keywords": [
+    "pdf",
+    "fdf",
+    "utf8"
+  ],
+  "author": "Dominik Heier <dominik.heier@gmail.com> (http://www.flexify.net/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dommmel/fill-pdf/issues"
+  },
+  "homepage": "https://github.com/dommmel/fill-pdf"
+}
