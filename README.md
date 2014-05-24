@@ -1,10 +1,24 @@
-fill-js
-=======
+# fill-js
+
 
 A node module to fill out pdf forms (utf8 compatible).
 
+It uses [pdftk](http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/) to fill out pdf forms and [ghostscript](http://www.ghostscript.com/) to convert embedded fonts to outlines to increase cross-device robustness.
+
 ## Installation
     npm install fill-pdf
+ 
+## Dependencies
+You need to have the ```pdftk``` an ```gs``` binaries in your PATH.  
+
+
+### Install on Mac OSX
+
+* To install PDFtk use [the official installer](http://www.pdflabs.com/tools/pdftk-server/) or if you have [homebrew-cask](https://github.com/phinze/homebrew-cask) installed you can run ```brew cask install pdftk```
+* To install Ghoscript via homebrew run :```brew install ghostscript```
+
+### Install on Ubuntu
+```sudo apt-get install pdftk ghostscript```
 
 ## Usage example (with express)
 
