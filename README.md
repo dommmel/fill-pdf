@@ -35,4 +35,8 @@ app.get('/filled_form.pdf', function(req, res) {
 });
 ```
 
+## License
+MIT
+
+## Acknowledgements
 based on [utf8-fdf-generator](https://www.npmjs.org/package/utf8-fdf-generator)
