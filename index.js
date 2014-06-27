@@ -68,9 +68,12 @@ exports.generatePdf = function(data, templatePath,callback) {
       result = fs.readFileSync(tempNameResult)
 
       // Delete files
-      fs.unlinkSync(tempName);
-      fs.unlinkSync(tempNameResult);
-
+      try {
+        fs.unlinkSync(tempName);
+        fs.unlinkSync(tempNameResult);
+      } catch (e) {
+        console.log("Cannot delete temporary files - not found");
+      }
       callback(result);
      });
    });
