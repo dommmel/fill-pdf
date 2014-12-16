@@ -35,7 +35,7 @@ exports.generateFdf = function(data, fileName) {
 
   for(var i=0; i<dataKeys.length; i++) {
     var name = dataKeys[i];
-    var value = data[name].replace("\r\n","\r");
+    var value = data[name].toString().replace("\r\n","\r");
 
     body = Buffer.concat([ body, new Buffer("<<\n") ]);
     body = Buffer.concat([ body, new Buffer("/T (") ]);
