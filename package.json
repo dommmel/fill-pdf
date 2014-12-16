@@ -13,7 +13,8 @@
   "keywords": [
     "pdf",
     "fdf",
-    "utf8"
+    "utf8",
+    "pdftk"
   ],
   "author": "Dominik Heier <dominik.heier@gmail.com> (http://www.flexify.net/)",
   "license": "MIT",
