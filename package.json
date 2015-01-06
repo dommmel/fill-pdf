@@ -13,12 +13,17 @@
   "keywords": [
     "pdf",
     "fdf",
-    "utf8"
+    "utf8",
+    "pdftk"
   ],
   "author": "Dominik Heier <dominik.heier@gmail.com> (http://www.flexify.net/)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/dommmel/fill-pdf/issues"
   },
-  "homepage": "https://github.com/dommmel/fill-pdf"
+  "homepage": "https://github.com/dommmel/fill-pdf",
+  "dependencies": {
+    "iconv": "^2.1.4",
+    "temp": "^0.8.1"
+  }
 }
