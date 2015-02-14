@@ -4,7 +4,7 @@
   "description": "Fill out pdf forms",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/mocha/bin/mocha"
   },
   "repository": {
     "type": "git",
@@ -25,5 +25,9 @@
   "dependencies": {
     "iconv": "^2.1.4",
     "temp": "^0.8.1"
+  },
+  "devDependencies": {
+    "mocha": "^2.1.0",
+    "temporary": "0.0.8"
   }
 }
