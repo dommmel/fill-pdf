@@ -1,6 +1,6 @@
 {
   "name": "fill-pdf",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Fill out pdf forms",
   "main": "index.js",
   "scripts": {
