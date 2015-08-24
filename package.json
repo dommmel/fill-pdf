@@ -1,6 +1,6 @@
 {
   "name": "fill-pdf",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Fill out pdf forms",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/dommmel/fill-pdf",
   "dependencies": {
-    "iconv": "^2.1.4",
-    "temp": "^0.8.1"
+    "iconv": "~2.1.4",
+    "temp": "~0.8.1"
   }
 }
