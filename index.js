@@ -72,7 +72,7 @@ exports.generatePdf = function(data, templatePath, callback) {
 
         // Check if Error thrown from exec
         if (error) {
-          console.error('exec error: ' + error + '\n' + stderr);
+          console.error('exec error: ' + error + '\n' + stderrt);
           callback(err);
         }
 
@@ -107,11 +107,6 @@ exports.generatePdf = function(data, templatePath, callback) {
         });
      });
    });
-
-    // Throw Error if code is given.. Code = 0 is good
-    if ( code ) {
-      throw new Error('Exit Code: ' + code);
-    }
 
   // Write FDF file to pdftk spawned process
   child.stdin.write(exports.generateFdf(data));
