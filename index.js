@@ -108,6 +108,11 @@ exports.generatePdf = function(data, templatePath, callback) {
      });
    });
 
+    // Throw Error if code is given.. Code = 0 is good
+    if ( code ) {
+      throw new Error('Exit Code: ' + code);
+    }
+
   // Write FDF file to pdftk spawned process
   child.stdin.write(exports.generateFdf(data));
   child.stdin.end();
