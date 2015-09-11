@@ -50,11 +50,14 @@ describe('fill-pdf', function() {
         TRADE_CERTIFICATE: 'Yes'
       }
 
-      fillPdf.generatePdf(formData, '/test/resources/test.pdf', function(tempFile) {
-        // Enable line below if you want to visual verify fill
-        //exec('open ' + tempFile, function() { fs.unlink(tempFile)});
-        fs.unlink(tempFile);
-        done();
+      fillPdf.generatePdf(formData, '/test/resources/test.pdf', function(err, pdf) {
+        // Uncomment if you want to open the file to view
+        /*
+        fs.writeFileSync('test-result.pdf', pdf);
+        exec('open test-result.pdf');
+        */
+
+        done(err);
       });
     });
 

@@ -28,15 +28,14 @@ var formDate = { FieldName: 'Text to put into form field' };
 var pdfTemplatePath = "templates.pdf";
 
 app.get('/filled_form.pdf', function(req, res) {
-  fillPdf.generatePdf(formDate,pdfTemplatePath, function(output) {
-    res.type("application/pdf");
-    res.send(output);
+  fillPdf.generatePdf(formDate,pdfTemplatePath, function(err, output) {
+    if ( !err ) {
+      res.type("application/pdf");
+      res.send(output);
+    }
   });
 });
 ```
-
-## License
-MIT
 
 ## Acknowledgements
 based on [utf8-fdf-generator](https://www.npmjs.org/package/utf8-fdf-generator)
