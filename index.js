@@ -5,8 +5,10 @@ var fs    = require('fs')
   , spawn = require('child_process').spawn
   , temp  = require('temp');
 
-exports.generateFdf = function(data, fileName) {
+exports.generateFdf = function(data) {
   var header, body, footer, dataKeys;
+
+  // We should really come up with a new way of making FDF files, this is doing a lot of buffer instantiation..
 
   header = Buffer([]);
   header = Buffer.concat([ header, new Buffer("%FDF-1.2\n") ]);
@@ -51,40 +53,71 @@ exports.generateFdf = function(data, fileName) {
   return fdf;
 }
 
-exports.generatePdf = function(data, templatePath,callback) {
+exports.generatePdf = function(data, templatePath, callback) {
   var tempName = temp.path({suffix: '.pdf'});
   var tempNameResult = temp.path({suffix: '.pdf'});
 
-  child = spawn("pdftk", ["app/"+templatePath,"fill_form","-","output",tempName,"flatten"]);
+  child = spawn("pdftk", [__dirname+templatePath,"fill_form","-","output",tempName,"flatten"]);
 
   child.on('exit', function(code) {
-    var cmd = "gs -dNOCACHE -sDEVICE=pdfwrite -sOutputFile="+tempNameResult +" -dbatch -dNOPAUSE -dQUIET  " + tempName +"  -c quit"
-    console.log(cmd);
-    exec(cmd,  function (error, stdout, stderr) {
-      console.log('stderr: ' + stderr);
-      if (error !== null) {
-        console.log('exec error: ' + error);
-      }
-      result = fs.readFileSync(tempNameResult)
 
-      // Delete files
-      try {
-        fs.unlinkSync(tempName);
-        fs.unlinkSync(tempNameResult);
-      } catch (e) {
-        console.log("Cannot delete temporary files - not found");
-      }
-      callback(result);
+    // If a exit code besides 0 was thrown then send an error
+    if ( code ) {
+      callback(new Error('Non 0 exit code from pdftk spawn: ' + code));
+    }
+
+    // Is GhostScript necessary for this module?
+    exec("gs -dNOCACHE -sDEVICE=pdfwrite -sOutputFile="+tempNameResult +" -dbatch -dNOPAUSE -dQUIET  " + tempName +"  -c quit",
+      function (error, stdout, stderr) {
+
+        // Check if Error thrown from exec
+        if (error) {
+          console.error('exec error: ' + error + '\n' + stderrt);
+          callback(err);
+        }
+
+        if ( stderr ) {
+          console.error('stderr: ' + stderr);
+        }
+
+
+        // Async read tempfile, we should think about making this a stream instead of a read into memory.
+        fs.readFile(tempNameResult, function(err, filledPdf) {
+
+          if ( err ) {
+            callback(err);
+          }
+
+          // Delete files, doing nested callbacks for now, but lets look into maybe using async for this
+          fs.unlink(tempName, function(err) {
+            if ( err ) {
+              return callback(err);
+            }
+
+            fs.unlink(tempNameResult, function(err) {
+              if ( err ) {
+                return callback(err);
+              }
+
+              // Everything Looks good, send back pdfFile.
+              callback(null, filledPdf);
+
+            });
+          })
+        });
      });
    });
 
+  // Write FDF file to pdftk spawned process
   child.stdin.write(exports.generateFdf(data));
   child.stdin.end();
+
   child.on('error', function (err) {
-    console.log('Errror', err);
+    callback(err);
   });
+
   child.stderr.on('data', function (data) {
-    console.log('stderr: ' + data);
+    console.error('stderr: ' + data);
   });
 
 }
