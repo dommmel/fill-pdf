@@ -1,5 +1,6 @@
 # fill-js
 
+[![Build Status](https://travis-ci.org/dommmel/fill-pdf.svg?branch=master)](https://travis-ci.org/dommmel/fill-pdf)
 
 A node module to fill out pdf forms (utf8 compatible).
 
