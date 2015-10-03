@@ -3,7 +3,8 @@ var assert    = require('assert'),
     spawn     = require('child_process').spawnSync,
     exec      = require('child_process').exec,
     fillPdf   = require('../index.js'),
-    fs        = require('fs');
+    fs        = require('fs'),
+    path      = require('path');
 
 var dir = new temporary.Dir();
 
@@ -34,29 +35,37 @@ describe('Temp File Generation', function() {
 
 describe('fill-pdf', function() {
   describe('#generatePdf()', function() {
+
+    var formData = {
+      Name_Last: 'Doe',
+      Name_First: 'John',
+      Name_Middle: 'Francis',
+      Telephone_Home: 1112223333,
+      Sex: 'MALE',
+      Address_2: '1234 Some Rd',
+      City: 'Annapolis',
+      STATE: 'MD',
+      ZIP: 22334,
+      PHD: 'Yes',
+      TRADE_CERTIFICATE: 'Yes'
+    }
+
     it('should accept test/resources/test.pdf', function(done) {
 
-      var formData = {
-        Name_Last: 'Doe',
-        Name_First: 'John',
-        Name_Middle: 'Francis',
-        Telephone_Home: 1112223333,
-        Sex: 'MALE',
-        Address_2: '1234 Some Rd',
-        City: 'Annapolis',
-        STATE: 'MD',
-        ZIP: 22334,
-        PHD: 'Yes',
-        TRADE_CERTIFICATE: 'Yes'
-      }
-
-      fillPdf.generatePdf(formData, '/test/resources/test.pdf', function(err, pdf) {
+      fillPdf.generatePdf(formData, 'test/resources/test.pdf', function(err, pdf) {
         // Uncomment if you want to open the file to view
         /*
         fs.writeFileSync('test-result.pdf', pdf);
         exec('open test-result.pdf');
         */
+        assert(pdf);
+        done(err);
+      });
+    });
 
+    it('should accept an absolute path as a file location', function(done) {
+      fillPdf.generatePdf(formData, path.resolve(__dirname + '/resources/test.pdf'), function(err, pdf) {
+        assert(pdf);
         done(err);
       });
     });

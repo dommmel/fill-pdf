@@ -1,9 +1,10 @@
-var fs    = require('fs')
-  , Iconv = require('iconv').Iconv
-  , iconv = new Iconv('UTF-8', 'UTF-16')
-  , exec  = require('child_process').exec
-  , spawn = require('child_process').spawn
-  , temp  = require('temp');
+var fs    = require('fs'),
+    path  = require('path'),
+    Iconv = require('iconv').Iconv,
+    iconv = new Iconv('UTF-8', 'UTF-16'),
+    exec  = require('child_process').exec,
+    spawn = require('child_process').spawn,
+    temp  = require('temp');
 
 exports.generateFdf = function(data) {
   var header, body, footer, dataKeys;
@@ -54,10 +55,11 @@ exports.generateFdf = function(data) {
 }
 
 exports.generatePdf = function(data, templatePath, callback) {
-  var tempName = temp.path({suffix: '.pdf'});
-  var tempNameResult = temp.path({suffix: '.pdf'});
+  var tempName       = temp.path({suffix: '.pdf'}),
+      tempNameResult = temp.path({suffix: '.pdf'}),
+      pdfPath        = path.isAbsolute(templatePath) ? templatePath : path.join(__dirname, templatePath);
 
-  child = spawn("pdftk", [__dirname+templatePath,"fill_form","-","output",tempName,"flatten"]);
+  child = spawn("pdftk", [pdfPath, "fill_form", "-", "output", tempName, "flatten"]);
 
   child.on('exit', function(code) {
 
