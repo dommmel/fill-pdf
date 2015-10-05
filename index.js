@@ -4,10 +4,7 @@ var fs    = require('fs'),
     iconv = new Iconv('UTF-8', 'UTF-16'),
     exec  = require('child_process').exec,
     spawn = require('child_process').spawn,
-    temp  = require('temp'),
-    isAbsolute = function(p) {
-    return (path.isAbsolute && path.isAbsolute(p)) || (path.normalize(p + '/') === path.normalize(path.resolve(p) + '/'));
-};
+    temp  = require('temp');
 
 exports.generateFdf = function(data) {
   var header, body, footer, dataKeys;
@@ -126,3 +123,7 @@ exports.generatePdf = function(data, templatePath, callback) {
   });
 
 }
+
+function isAbsolute(Path) {
+    return (path.isAbsolute && path.isAbsolute(Path)) || (path.normalize(Path + '/') === path.normalize(path.resolve(Path) + '/'));
+};
