@@ -1,6 +1,5 @@
 var assert    = require('assert'),
     temporary = require('temporary'),
-    spawn     = require('child_process').spawnSync,
     exec      = require('child_process').exec,
     fillPdf   = require('../index.js'),
     fs        = require('fs'),
@@ -9,9 +8,11 @@ var assert    = require('assert'),
 var dir = new temporary.Dir();
 
 describe('pdftk', function() {
-  it('should exist', function() {
-    var pdftk = spawn('pdftk', ['--version']);
-    assert.equal(typeof pdftk.error, 'undefined', 'pdftk is not installed, fill-pdf requires pdftk to be installed and added to your PATH');
+  it('should exist', function(done) {
+    var pdftk = exec('pdftk', ['--version'], function(err, stdout, stderr) {
+      assert(!err && !stderr, 'pdftk is not installed, fill-pdf requires pdftk to be installed and added to your PATH');
+      done(err);
+    });;
   });
 });
 
