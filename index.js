@@ -57,7 +57,7 @@ exports.generateFdf = function(data) {
 exports.generatePdf = function(data, templatePath, callback) {
   var tempName       = temp.path({suffix: '.pdf'}),
       tempNameResult = temp.path({suffix: '.pdf'}),
-      pdfPath        = path.isAbsolute(templatePath) ? templatePath : path.join(__dirname, templatePath);
+      pdfPath        = isAbsolute(templatePath) ? templatePath : path.join(__dirname, templatePath);
 
   child = spawn("pdftk", [pdfPath, "fill_form", "-", "output", tempName, "flatten"]);
 
@@ -123,3 +123,7 @@ exports.generatePdf = function(data, templatePath, callback) {
   });
 
 }
+
+function isAbsolute(Path) {
+    return (path.isAbsolute && path.isAbsolute(Path)) || (path.normalize(Path + '/') === path.normalize(path.resolve(Path) + '/'));
+};
