@@ -4,7 +4,10 @@ var fs    = require('fs'),
     iconv = new Iconv('UTF-8', 'UTF-16'),
     exec  = require('child_process').exec,
     spawn = require('child_process').spawn,
-    temp  = require('temp');
+    temp  = require('temp'),
+    isAbsolute = function(p) {
+    return (path.isAbsolute && path.isAbsolute(p)) || (path.normalize(p + '/') === path.normalize(path.resolve(p) + '/'));
+};
 
 exports.generateFdf = function(data) {
   var header, body, footer, dataKeys;
@@ -57,7 +60,7 @@ exports.generateFdf = function(data) {
 exports.generatePdf = function(data, templatePath, callback) {
   var tempName       = temp.path({suffix: '.pdf'}),
       tempNameResult = temp.path({suffix: '.pdf'}),
-      pdfPath        = path.isAbsolute(templatePath) ? templatePath : path.join(__dirname, templatePath);
+      pdfPath        = isAbsolute(templatePath) ? templatePath : path.join(__dirname, templatePath);
 
   child = spawn("pdftk", [pdfPath, "fill_form", "-", "output", tempName, "flatten"]);
 
