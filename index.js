@@ -74,7 +74,7 @@ exports.generatePdf = function(data, templatePath, callback) {
 
         // Check if Error thrown from exec
         if (error) {
-          console.error('exec error: ' + error + '\n' + stderrt);
+          console.error('exec error: ' + error + '\n' + stderr);
           callback(err);
         }
 
