@@ -74,12 +74,13 @@ exports.generatePdf = function(data, templatePath, callback) {
 
         // Check if Error thrown from exec
         if (error) {
-          console.error('exec error: ' + error + '\n' + stderrt);
-          callback(err);
+          console.error('exec error: ' + error + '\n' + stderr);
+          return callback(error);
         }
 
         if ( stderr ) {
           console.error('stderr: ' + stderr);
+          return callback(stderr);
         }
 
 
@@ -87,7 +88,7 @@ exports.generatePdf = function(data, templatePath, callback) {
         fs.readFile(tempNameResult, function(err, filledPdf) {
 
           if ( err ) {
-            callback(err);
+            return callback(err);
           }
 
           // Delete files, doing nested callbacks for now, but lets look into maybe using async for this
@@ -103,7 +104,6 @@ exports.generatePdf = function(data, templatePath, callback) {
 
               // Everything Looks good, send back pdfFile.
               callback(null, filledPdf);
-
             });
           })
         });
