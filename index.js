@@ -54,12 +54,30 @@ exports.generateFdf = function(data) {
   return fdf;
 }
 
-exports.generatePdf = function(data, templatePath, callback) {
+exports.generatePdf = function(data, templatePath, extendArgs, callback) {
   var tempName       = temp.path({suffix: '.pdf'}),
       tempNameResult = temp.path({suffix: '.pdf'}),
       pdfPath        = isAbsolute(templatePath) ? templatePath : path.join(__dirname, templatePath);
 
-  child = spawn("pdftk", [pdfPath, "fill_form", "-", "output", tempName, "flatten"]);
+  // retrieve arguments as array
+  var args = [];
+  for (var i = 0; i < arguments.length; i++) {
+       args.push(arguments[i]);
+  }
+
+  data = args.shift();
+  templatePath = args.shift();
+  callback = args.pop();
+
+  if (args.length > 0) extendArgs = args.shift(); else extendArgs = undefined;
+
+  var processArgs = [pdfPath, "fill_form", "-", "output", tempName];
+
+  if(extendArgs) {
+      args.concat(extendArgs);
+  }
+
+  child = spawn("pdftk", processArgs);
 
   child.on('exit', function(code) {
 
