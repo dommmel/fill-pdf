@@ -59,23 +59,19 @@ exports.generatePdf = function(data, templatePath, extendArgs, callback) {
       tempNameResult = temp.path({suffix: '.pdf'}),
       pdfPath        = isAbsolute(templatePath) ? templatePath : path.join(__dirname, templatePath);
 
-  // retrieve arguments as array
-  var args = [];
-  for (var i = 0; i < arguments.length; i++) {
-       args.push(arguments[i]);
+  // Check if extendArgs is our callback, adds backwards compat
+  if (typeof extendArgs === 'function') {
+   callback = extendArgs;
+   extendArgs = [];
+  }
+  else if (extendArgs instanceof Array) {
+    args = extendArgs;
+  }
+  else {
+    extendArgs = [];
   }
 
-  data = args.shift();
-  templatePath = args.shift();
-  callback = args.pop();
-
-  if (args.length > 0) extendArgs = args.shift(); else extendArgs = undefined;
-
-  var processArgs = [pdfPath, "fill_form", "-", "output", tempName];
-
-  if(extendArgs) {
-      args.concat(extendArgs);
-  }
+  var processArgs = [pdfPath, "fill_form", "-", "output", tempName].concat(extendArgs);
 
   child = spawn("pdftk", processArgs);
 
