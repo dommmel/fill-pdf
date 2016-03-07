@@ -71,7 +71,13 @@ describe('fill-pdf', function() {
       });
     });
 
+    it('should accept additional arguments', function(done) {
+        fillPdf.generatePdf(formData, 'test/resources/test.pdf', ["flatten"], function(err, pdf) {
+          assert(pdf);
+          done(err);
+        });
+    });
+
     // TODO: Do PDF parsing to verify fill worked
   });
 });
-

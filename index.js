@@ -54,12 +54,26 @@ exports.generateFdf = function(data) {
   return fdf;
 }
 
-exports.generatePdf = function(data, templatePath, callback) {
+exports.generatePdf = function(data, templatePath, extendArgs, callback) {
   var tempName       = temp.path({suffix: '.pdf'}),
       tempNameResult = temp.path({suffix: '.pdf'}),
       pdfPath        = isAbsolute(templatePath) ? templatePath : path.join(__dirname, templatePath);
 
-  child = spawn("pdftk", [pdfPath, "fill_form", "-", "output", tempName, "flatten"]);
+  // Check if extendArgs is our callback, adds backwards compat
+  if (typeof extendArgs === 'function') {
+   callback = extendArgs;
+   extendArgs = [];
+  }
+  else if (extendArgs instanceof Array) {
+    args = extendArgs;
+  }
+  else {
+    extendArgs = [];
+  }
+
+  var processArgs = [pdfPath, "fill_form", "-", "output", tempName].concat(extendArgs);
+
+  child = spawn("pdftk", processArgs);
 
   child.on('exit', function(code) {
 
