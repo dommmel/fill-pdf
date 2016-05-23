@@ -1,7 +1,6 @@
 language: node_js
 node_js:
- - "4.2"
- - "0.12"
+ - "5"
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get -y install pdftk ghostscript
