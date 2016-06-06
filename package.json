@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/dommmel/fill-pdf",
   "dependencies": {
-    "iconv": "~2.1.4",
+    "iconv-lite": "~0.4.13",
     "temp": "~0.8.1"
   },
   "devDependencies": {

@@ -1,7 +1,6 @@
 var fs    = require('fs'),
     path  = require('path'),
-    Iconv = require('iconv').Iconv,
-    iconv = new Iconv('UTF-8', 'UTF-16'),
+    iconv = require('iconv-lite'),
     exec  = require('child_process').exec,
     spawn = require('child_process').spawn,
     temp  = require('temp');
@@ -42,10 +41,10 @@ exports.generateFdf = function(data) {
 
     body = Buffer.concat([ body, new Buffer("<<\n") ]);
     body = Buffer.concat([ body, new Buffer("/T (") ]);
-    body = Buffer.concat([ body, iconv.convert(name.toString()) ]);
+    body = Buffer.concat([ body, iconv.encode(name.toString(), 'UTF-16') ]);
     body = Buffer.concat([ body, new Buffer(")\n") ]);
     body = Buffer.concat([ body, new Buffer("/V (") ]);
-    body = Buffer.concat([ body, iconv.convert(value.toString()) ]);
+    body = Buffer.concat([ body, iconv.encode(value.toString(), 'UTF-16') ]);
     body = Buffer.concat([ body, new Buffer(")\n") ]);
     body = Buffer.concat([ body, new Buffer(">>\n") ]);
   }
