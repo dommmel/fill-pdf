@@ -8,45 +8,28 @@ var fs    = require('fs'),
 exports.generateFdf = function(data) {
   var header, body, footer, dataKeys;
 
-  // We should really come up with a new way of making FDF files, this is doing a lot of buffer instantiation..
+  // We should really come up with a new way of making FDF files, this is doing a lot of buffer instantiation.
 
   header = Buffer([]);
   header = Buffer.concat([ header, new Buffer("%FDF-1.2\n") ]);
   header = Buffer.concat([ header, new Buffer((String.fromCharCode(226)) + (String.fromCharCode(227)) + (String.fromCharCode(207)) + (String.fromCharCode(211)) + "\n") ]);
-  header = Buffer.concat([ header, new Buffer("1 0 obj \n") ]);
-  header = Buffer.concat([ header, new Buffer("<<\n") ]);
-  header = Buffer.concat([ header, new Buffer("/FDF \n") ]);
-  header = Buffer.concat([ header, new Buffer("<<\n") ]);
-  header = Buffer.concat([ header, new Buffer("/Fields [\n") ]);
+  header = Buffer.concat([ header, new Buffer("1 0 obj \n<<\n/FDF \n<<\n/Fields [\n") ]);
 
-  footer = Buffer([]);
-  footer = Buffer.concat([ footer, new Buffer("]\n") ]);
-  footer = Buffer.concat([ footer, new Buffer(">>\n") ]);
-  footer = Buffer.concat([ footer, new Buffer(">>\n") ]);
-  footer = Buffer.concat([ footer, new Buffer("endobj \n") ]);
-  footer = Buffer.concat([ footer, new Buffer("trailer\n") ]);
-  footer = Buffer.concat([ footer, new Buffer("\n") ]);
-  footer = Buffer.concat([ footer, new Buffer("<<\n") ]);
-  footer = Buffer.concat([ footer, new Buffer("/Root 1 0 R\n") ]);
-  footer = Buffer.concat([ footer, new Buffer(">>\n") ]);
-  footer = Buffer.concat([ footer, new Buffer("%%EOF\n") ]);
+  footer = new Buffer("]\n>>\n>>\nendobj \ntrailer\n\n<<\n/Root 1 0 R\n>>\n%%EOF\n");
 
   dataKeys = Object.keys(data);
 
   body = new Buffer([]);
 
   for(var i=0; i<dataKeys.length; i++) {
-    var name = dataKeys[i];
+    var name = dataKeys[i].toString();
     var value = data[name].toString().replace("\r\n","\r");
 
-    body = Buffer.concat([ body, new Buffer("<<\n") ]);
-    body = Buffer.concat([ body, new Buffer("/T (") ]);
-    body = Buffer.concat([ body, iconv.encode(name.toString(), 'UTF-16') ]);
-    body = Buffer.concat([ body, new Buffer(")\n") ]);
-    body = Buffer.concat([ body, new Buffer("/V (") ]);
-    body = Buffer.concat([ body, iconv.encode(value.toString(), 'UTF-16') ]);
-    body = Buffer.concat([ body, new Buffer(")\n") ]);
-    body = Buffer.concat([ body, new Buffer(">>\n") ]);
+    body = Buffer.concat([ body, new Buffer("<<\n/T (") ]);
+    body = Buffer.concat([ body, iconv.encode(name, 'UTF-16') ]);
+    body = Buffer.concat([ body, new Buffer(")\n/V (") ]);
+    body = Buffer.concat([ body, iconv.encode(value, 'UTF-16') ]);
+    body = Buffer.concat([ body, new Buffer(")\n>>\n") ]);
   }
 
   var fdf =  Buffer.concat([ header, body, footer ]);
