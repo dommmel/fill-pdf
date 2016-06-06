@@ -10,10 +10,7 @@ exports.generateFdf = function(data) {
 
   // We should really come up with a new way of making FDF files, this is doing a lot of buffer instantiation.
 
-  header = Buffer([]);
-  header = Buffer.concat([ header, new Buffer("%FDF-1.2\n") ]);
-  header = Buffer.concat([ header, new Buffer((String.fromCharCode(226)) + (String.fromCharCode(227)) + (String.fromCharCode(207)) + (String.fromCharCode(211)) + "\n") ]);
-  header = Buffer.concat([ header, new Buffer("1 0 obj \n<<\n/FDF \n<<\n/Fields [\n") ]);
+  header = new Buffer("%FDF-1.2\n\u00e2\u00e3\u00cf\u00d3\n1 0 obj \n<<\n/FDF \n<<\n/Fields [\n");
 
   footer = new Buffer("]\n>>\n>>\nendobj \ntrailer\n\n<<\n/Root 1 0 R\n>>\n%%EOF\n");
 
