@@ -22,11 +22,13 @@ exports.generateFdf = function(data) {
     var name = dataKeys[i].toString();
     var value = data[name].toString().replace("\r\n","\r");
 
-    body = Buffer.concat([ body, new Buffer("<<\n/T (") ]);
-    body = Buffer.concat([ body, iconv.encode(name, 'UTF-16') ]);
-    body = Buffer.concat([ body, new Buffer(")\n/V (") ]);
-    body = Buffer.concat([ body, iconv.encode(value, 'UTF-16') ]);
-    body = Buffer.concat([ body, new Buffer(")\n>>\n") ]);
+    body = Buffer.concat([ 
+        body,
+        new Buffer("<<\n/T ("),
+        iconv.encode(name, 'UTF-16'),
+        new Buffer(")\n/V ("),
+        iconv.encode(value, 'UTF-16'),
+        new Buffer(")\n>>\n") ]);
   }
 
   var fdf =  Buffer.concat([ header, body, footer ]);
