@@ -1,4 +1,4 @@
-# fill-js
+# fill-pdf
 
 [![Build Status](https://travis-ci.org/dommmel/fill-pdf.svg?branch=master)](https://travis-ci.org/dommmel/fill-pdf)
 
