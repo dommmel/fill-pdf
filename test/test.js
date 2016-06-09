@@ -80,4 +80,28 @@ describe('fill-pdf', function() {
 
     // TODO: Do PDF parsing to verify fill worked
   });
+
+  describe('#generateFdf()', function() {
+
+    var formData = {
+      Name_Last: 'Doe',
+      Name_First: 'John',
+      Name_Middle: 'Francis',
+      Telephone_Home: 1112223333,
+      Sex: 'MALE',
+      Address_2: '1234 Some Rd',
+      City: 'Annapolis',
+      STATE: 'MD',
+      ZIP: 22334,
+      PHD: 'Yes',
+      TRADE_CERTIFICATE: 'Yes'
+    };
+
+    it('should generate valid data', function() {
+      var actual = fillPdf.generateFdf(formData);
+      var expected = fs.readFileSync('test/resources/test.fdf', 'utf8');
+      assert(actual, expected);
+    });
+    
+  });
 });
