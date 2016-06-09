@@ -29,8 +29,7 @@ exports.generateFdf = function(data) {
 }
 
 exports.generatePdf = function(data, templatePath, extendArgs, callback) {
-  var tempName       = temp.path({suffix: '.pdf'}),
-      tempNameResult = temp.path({suffix: '.pdf'}),
+  var tempNameResult = temp.path({suffix: '.pdf'}),
       pdfPath        = isAbsolute(templatePath) ? templatePath : path.join(__dirname, templatePath);
 
   // Check if extendArgs is our callback, adds backwards compat
@@ -45,7 +44,7 @@ exports.generatePdf = function(data, templatePath, extendArgs, callback) {
     extendArgs = [];
   }
 
-  var processArgs = [pdfPath, "fill_form", "-", "output", tempName].concat(extendArgs);
+  var processArgs = [pdfPath, "fill_form", "-", "output", tempNameResult].concat(extendArgs);
 
   child = spawn("pdftk", processArgs);
 
@@ -56,47 +55,24 @@ exports.generatePdf = function(data, templatePath, extendArgs, callback) {
       callback(new Error('Non 0 exit code from pdftk spawn: ' + code));
     }
 
-    // Is GhostScript necessary for this module?
-    exec("gs -dNOCACHE -sDEVICE=pdfwrite -sOutputFile="+tempNameResult +" -dbatch -dNOPAUSE -dQUIET  " + tempName +"  -c quit",
-      function (error, stdout, stderr) {
+    // Async read tempfile, we should think about making this a stream instead of a read into memory.
+    fs.readFile(tempNameResult, function(err, filledPdf) {
 
-        // Check if Error thrown from exec
-        if (error) {
-          console.error('exec error: ' + error + '\n' + stderr);
-          return callback(error);
+      if ( err ) {
+        return callback(err);
+      }
+
+      // Delete files, doing nested callbacks for now, but lets look into maybe using async for this
+      fs.unlink(tempNameResult, function(err) {
+        if ( err ) {
+          return callback(err);
         }
 
-        if ( stderr ) {
-          console.error('stderr: ' + stderr);
-          return callback(stderr);
-        }
-
-
-        // Async read tempfile, we should think about making this a stream instead of a read into memory.
-        fs.readFile(tempNameResult, function(err, filledPdf) {
-
-          if ( err ) {
-            return callback(err);
-          }
-
-          // Delete files, doing nested callbacks for now, but lets look into maybe using async for this
-          fs.unlink(tempName, function(err) {
-            if ( err ) {
-              return callback(err);
-            }
-
-            fs.unlink(tempNameResult, function(err) {
-              if ( err ) {
-                return callback(err);
-              }
-
-              // Everything Looks good, send back pdfFile.
-              callback(null, filledPdf);
-            });
-          })
-        });
-     });
-   });
+        // Everything Looks good, send back pdfFile.
+        callback(null, filledPdf);
+      });
+    });
+  });
 
   // Write FDF file to pdftk spawned process
   child.stdin.write(exports.generateFdf(data));

@@ -3,4 +3,4 @@ node_js:
  - "5"
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get -y install pdftk ghostscript
+  - sudo apt-get -y install pdftk
