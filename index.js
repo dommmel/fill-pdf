@@ -1,6 +1,5 @@
 var fs    = require('fs'),
     path  = require('path'),
-    iconv = require('iconv-lite'),
     exec  = require('child_process').exec,
     spawn = require('child_process').spawn,
     temp  = require('temp');
@@ -22,13 +21,7 @@ exports.generateFdf = function(data) {
     var name = dataKeys[i].toString();
     var value = data[name].toString().replace("\r\n","\r");
 
-    body = Buffer.concat([ 
-        body,
-        new Buffer("<<\n/T ("),
-        iconv.encode(name, 'UTF-16'),
-        new Buffer(")\n/V ("),
-        iconv.encode(value, 'UTF-16'),
-        new Buffer(")\n>>\n") ]);
+    body = Buffer.concat([ body, new Buffer("<<\n/T (" + name + ")\n/V (" + value + ")\n>>\n") ]);
   }
 
   var fdf =  Buffer.concat([ header, body, footer ]);
