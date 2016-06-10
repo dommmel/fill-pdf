@@ -87,10 +87,8 @@ function createHandlePdftkExit(tempNameResult, callback) {
       (cb) => {
         fs.readFile(tempNameResult, (err, filledPdf) => cb(err, filledPdf));
       },
-      (cb, filledPdf) => {
-        fs.unlink(tempNameResult, function(err) {
-          callback(err, filledPdf);
-        });
+      (filledPdf, cb) => {
+        fs.unlink(tempNameResult, (err) => cb(err, filledPdf));
       }
     ],
     function(err, result) {
