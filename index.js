@@ -31,17 +31,10 @@ exports.generatePdf = function(data, templatePath, extendArgs, callback) {
   var tempNameResult = temp.path({suffix: '.pdf'}),
       pdfPath        = isAbsolute(templatePath) ? templatePath : path.join(__dirname, templatePath);
 
-  // Check if extendArgs is our callback, adds backwards compat
-  if (typeof extendArgs === 'function') {
-   callback = extendArgs;
-   extendArgs = [];
-  }
-  else if (extendArgs instanceof Array) {
-    args = extendArgs;
-  }
-  else {
-    extendArgs = [];
-  }
+  extendArgs = normalizeArgs(extendArgs, callback);
+
+  console.log(extendArgs);
+  console.log(callback);
 
   var processArgs = [pdfPath, "fill_form", "-", "output", tempNameResult].concat(extendArgs);
 
@@ -85,6 +78,22 @@ exports.generatePdf = function(data, templatePath, extendArgs, callback) {
     console.error('stderr: ' + data);
   });
 
+}
+
+function normalizeArgs(extendArgs, callback) {
+  // Check if extendArgs is our callback, adds backwards compat
+  if (typeof extendArgs === 'function') {
+    console.log('is a function');
+   callback = extendArgs;
+   extendArgs = [];
+  }
+  else if (extendArgs instanceof Array) {
+    args = extendArgs;
+  }
+  else {
+    extendArgs = [];
+  }
+  return extendArgs;
 }
 
 function isAbsolute(Path) {
