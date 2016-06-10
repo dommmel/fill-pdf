@@ -41,9 +41,9 @@ exports.generatePdf = function(data, templatePath, extendArgs, callback) {
 
   let child = spawn('pdftk', processArgs);
 
-  writeFdfToPdftk(child, data);
   handlePdftkError(child, callback);
   handlePdftkExit(child, tempNameResult, callback);
+  writeFdfToPdftk(child, data);
 };
 
 function normalizeArgs(extendArgs, callback) {
