@@ -29,12 +29,15 @@ exports.generateFdf = function(data) {
 };
 
 exports.generatePdf = function(data, templatePath, extendArgs, callback) {
-  var tempNameResult = temp.path({suffix: '.pdf'}),
+  let tempNameResult = temp.path({suffix: '.pdf'}),
       pdfPath        = isAbsolute(templatePath) ? templatePath : path.join(__dirname, templatePath);
 
-  [extendArgs, callback] = normalizeArgs(extendArgs, callback);
+  let normalized = normalizeArgs(extendArgs, callback);
 
-  var processArgs = [pdfPath, 'fill_form', '-', 'output', tempNameResult].concat(extendArgs);
+  extendArgs = normalized.args;
+  callback   = normalized.callback;
+
+  let processArgs = [pdfPath, 'fill_form', '-', 'output', tempNameResult].concat(extendArgs);
 
   let child = spawn('pdftk', processArgs);
 
@@ -52,7 +55,7 @@ function normalizeArgs(extendArgs, callback) {
   else if (!(extendArgs instanceof Array)) {
     extendArgs = [];
   }
-  return [extendArgs, callback];
+  return { args: extendArgs, callback: callback };
 }
 
 function writeFdfToPdftk(child, data) {
@@ -105,7 +108,7 @@ function normalizeArgs(extendArgs, callback) {
   else if (!(extendArgs instanceof Array)) {
     extendArgs = [];
   }
-  return [extendArgs, callback];
+  return { args: extendArgs, callback: callback };
 }
 
 function isAbsolute(Path) {
