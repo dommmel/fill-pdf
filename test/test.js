@@ -94,14 +94,15 @@ describe('fill-pdf', function() {
       STATE: 'MD',
       ZIP: 22334,
       PHD: 'Yes',
-      TRADE_CERTIFICATE: 'Yes'
+      TRADE_CERTIFICATE: 'Yes',
+      Price: '£10.50'
     };
 
     it('should generate valid data', function() {
       var actual = fillPdf.generateFdf(formData);
       var expected = fs.readFileSync('test/resources/test.fdf', 'utf8');
-      assert(actual, expected);
+      assert.equal(actual, expected);
     });
-    
+
   });
 });

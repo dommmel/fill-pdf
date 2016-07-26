@@ -4,7 +4,10 @@ const fs  = require('fs'),
     path  = require('path'),
     spawn = require('child_process').spawn,
     async = require('async'),
-    temp  = require('temp');
+    temp  = require('temp'),
+    Iconv = require('iconv').Iconv;
+
+const iconv = new Iconv('UTF-8', 'UTF-16');
 
 exports.generateFdf = function(data) {
   var header, body, footer, dataKeys;
@@ -19,9 +22,13 @@ exports.generateFdf = function(data) {
 
   for(var i=0; i<dataKeys.length; i++) {
     var name = dataKeys[i].toString();
-    var value = data[name].toString().replace('\r\n','\r');
+    var value = data[name].toString().replace('\r\n','\n');
 
-    body = Buffer.concat([ body, new Buffer('<<\n/T (' + name + ')\n/V (' + value + ')\n>>\n') ]);
+    body = Buffer.concat([ body, new Buffer('<<\n/T (') ]);
+    body = Buffer.concat([ body, iconv.convert(name.toString()) ]);
+    body = Buffer.concat([ body, new Buffer(')\n/V (') ]);
+    body = Buffer.concat([ body, iconv.convert(value.toString()) ]);
+    body = Buffer.concat([ body, new Buffer(')\n>>\n') ]);
   }
 
   var fdf =  Buffer.concat([ header, body, footer ]);
