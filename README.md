@@ -28,7 +28,7 @@ var formDate = { FieldName: 'Text to put into form field' };
 var pdfTemplatePath = "templates.pdf";
 
 app.get('/filled_form.pdf', function(req, res) {
-  fillPdf.generatePdf(formDate, pdfTemplatePath, function(err, output) {
+  fillPdf.generatePdf(formData, pdfTemplatePath, function(err, output) {
     if ( !err ) {
       res.type("application/pdf");
       res.send(output);
