@@ -100,7 +100,6 @@ describe('fill-pdf', function() {
 
     it('should generate valid data', function() {
       var actual = fillPdf.generateFdf(formData);
-      console.log(actual.toString());
       var expected = fs.readFileSync('test/resources/test.fdf', 'utf8');
       assert(actual, expected);
     });
