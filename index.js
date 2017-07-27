@@ -19,7 +19,7 @@ exports.generateFdf = function(data) {
 
   for(var i=0; i<dataKeys.length; i++) {
     var name = dataKeys[i].toString();
-    var value = data[name].toString().replace('\r\n','\r');
+    var value = data[name].toString().replace('\r\n','\r').replace(/(\(|\))/g, '\\$1');
 
     body = Buffer.concat([ body, new Buffer('<<\n/T (' + name + ')\n/V (' + value + ')\n>>\n') ]);
   }
