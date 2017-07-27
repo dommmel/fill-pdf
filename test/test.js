@@ -40,7 +40,7 @@ describe('fill-pdf', function() {
     var formData = {
       Name_Last: 'Doe',
       Name_First: 'John',
-      Name_Middle: 'Francis',
+      Name_Middle: '(Sir) Francis',
       Telephone_Home: 1112223333,
       Sex: 'MALE',
       Address_2: '1234 Some Rd',
@@ -48,7 +48,8 @@ describe('fill-pdf', function() {
       STATE: 'MD',
       ZIP: 22334,
       PHD: 'Yes',
-      TRADE_CERTIFICATE: 'Yes'
+      TRADE_CERTIFICATE: 'Yes',
+      PARENS: '(Escape)'
     }
 
     it('should accept test/resources/test.pdf', function(done) {
@@ -86,7 +87,7 @@ describe('fill-pdf', function() {
     var formData = {
       Name_Last: 'Doe',
       Name_First: 'John',
-      Name_Middle: 'Francis',
+      Name_Middle: '(Sir) Francis',
       Telephone_Home: 1112223333,
       Sex: 'MALE',
       Address_2: '1234 Some Rd',
