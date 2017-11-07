@@ -49,7 +49,7 @@ describe('fill-pdf', function() {
       ZIP: 22334,
       PHD: 'Yes',
       TRADE_CERTIFICATE: 'Yes',
-      PARENS: '(Escape)'
+      PARENS: 'a)\n>>\n<<\n/T (Name_Last)\n/V (VALUE NOT ESCAPED)\n>>\n<<\n/T (asdf)\n/V ('
     }
 
     it('should accept test/resources/test.pdf', function(done) {
@@ -85,7 +85,8 @@ describe('fill-pdf', function() {
   describe('#generateFdf()', function() {
 
     var formData = {
-      Name_Last: 'Doe',
+      // "Doe" in UTF-16LE
+      Name_Last: new Buffer([0x44, 0x00, 0x6f, 0x00, 0x65, 0x00]),
       Name_First: 'John',
       Name_Middle: '(Sir) Francis',
       Telephone_Home: 1112223333,
@@ -100,9 +101,9 @@ describe('fill-pdf', function() {
 
     it('should generate valid data', function() {
       var actual = fillPdf.generateFdf(formData);
-      var expected = fs.readFileSync('test/resources/test.fdf', 'utf8');
-      assert(actual, expected);
+      var expected = fs.readFileSync('test/resources/test.fdf');
+
+      assert(actual.compare(expected) === 0);
     });
-    
   });
 });

@@ -7,21 +7,23 @@ const fs  = require('fs'),
     temp  = require('temp');
 
 exports.generateFdf = function(data) {
-  var header, body, footer, dataKeys;
+  var header, body, footer;
 
   header = new Buffer('%FDF-1.2\n\u00e2\u00e3\u00cf\u00d3\n1 0 obj \n<<\n/FDF \n<<\n/Fields [\n');
 
   footer = new Buffer(']\n>>\n>>\nendobj \ntrailer\n\n<<\n/Root 1 0 R\n>>\n%%EOF\n');
 
-  dataKeys = Object.keys(data);
-
   body = new Buffer([]);
 
-  for(var i=0; i<dataKeys.length; i++) {
-    var name = dataKeys[i].toString();
-    var value = data[name].toString().replace('\r\n','\r').replace(/(\(|\))/g, '\\$1');
+  for(let key in data) {
+    var name = escapeFdf(key);
+    var value = escapeFdf(data[key]);
 
-    body = Buffer.concat([ body, new Buffer('<<\n/T (' + name + ')\n/V (' + value + ')\n>>\n') ]);
+    body = Buffer.concat([ body, new Buffer('<<\n/T (')]);
+    body = Buffer.concat([ body, name]);
+    body = Buffer.concat([ body, new Buffer(')\n/V (')]);
+    body = Buffer.concat([ body, value]);
+    body = Buffer.concat([ body, new Buffer(')\n>>\n')]);
   }
 
   var fdf =  Buffer.concat([ header, body, footer ]);
@@ -45,6 +47,35 @@ exports.generatePdf = function(data, templatePath, extendArgs, callback) {
   handlePdftkExit(child, tempNameResult, callback);
   writeFdfToPdftk(child, data);
 };
+
+// Escape data and return it as a buffer
+function escapeFdf(data) {
+  let escaped = new Buffer([]);
+  let buf;
+
+  if(typeof data === 'string' || data instanceof Buffer) {
+    buf = new Buffer(data);
+  } else if(typeof data.toString === 'function') {
+    buf = new Buffer(data.toString());
+  } else {
+    buf = new Buffer(Object.prototype.toString.call(data));
+  }
+
+  for(let i=0; i<buf.length; i++) {
+    let c1 = String.fromCharCode(buf[i]);
+    let c2 = String.fromCharCode(buf[i+1]);
+
+    if(c1 === '(' || c1 === ')') {
+      escaped = Buffer.concat([escaped, new Buffer('\\' + c1)]);
+    } else if(c1 === '\r' && c2 === '\n') {
+      escaped = Buffer.concat([escaped, new Buffer('\r')]);
+    } else {
+      escaped = Buffer.concat([escaped, new Buffer([buf[i]])]);
+    }
+  }
+
+  return escaped;
+}
 
 function normalizeArgs(extendArgs, callback) {
   // Check if extendArgs is our callback, adds backwards compat
