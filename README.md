@@ -8,7 +8,7 @@ It uses [pdftk](http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/) to fill out
 
 ## Installation
     npm install fill-pdf
- 
+
 ## Dependencies
 You need to have the ```pdftk``` binary in your PATH.
 
@@ -22,12 +22,12 @@ You need to have the ```pdftk``` binary in your PATH.
 
 ## Usage example (with express)
 
-```javascript
-var fillPdf = require("fill-pdf");
-var formDate = { FieldName: 'Text to put into form field' };
-var pdfTemplatePath = "templates.pdf";
+```js
+const fillPdf = require("fill-pdf");
+const formDate = { FieldName: 'Text to put into form field' };
+const pdfTemplatePath = "templates.pdf";
 
-app.get('/filled_form.pdf', function(req, res) {
+app.get('/filled_form.pdf', (req, res) => {
   fillPdf.generatePdf(formData, pdfTemplatePath, function(err, output) {
     if ( !err ) {
       res.type("application/pdf");
@@ -37,5 +37,25 @@ app.get('/filled_form.pdf', function(req, res) {
 });
 ```
 
+## Passing Custom Arguments to pdftk
+
+For more specific uses, you can also pass some extra arguments to `pdftk`. It is done by
+specifying them as an array, given as a third argument of the `fillPdf` function.
+
+For instance, if you want to make the output PDF not editable anymore, you can append the
+`flatten` argument such as:
+
+```js
+const fillPdf = require('fill-pdf');
+
+const extraArgs = ['flatten'];
+fillPdf.generatePdf(formData, pdfTemplatePath, extraArgs, (err, output) => {
+  // ...
+});
+```
+
+Take a look on `man pdftk` to get a list of all available arguments.
+
 ## Acknowledgements
+
 Based on [utf8-fdf-generator](https://www.npmjs.org/package/utf8-fdf-generator)
