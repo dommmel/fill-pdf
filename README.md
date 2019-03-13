@@ -24,7 +24,7 @@ You need to have the ```pdftk``` binary in your PATH.
 
 ```js
 const fillPdf = require("fill-pdf");
-const formDate = { FieldName: 'Text to put into form field' };
+const formData = { FieldName: 'Text to put into form field' };
 const pdfTemplatePath = "templates.pdf";
 
 app.get('/filled_form.pdf', (req, res) => {
