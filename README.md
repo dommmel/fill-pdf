@@ -15,7 +15,7 @@ You need to have the ```pdftk``` binary in your PATH.
 
 ### Install on Mac OSX
 
-* To install PDFtk use [the official installer](http://www.pdflabs.com/tools/pdftk-server/) or if you have [homebrew-cask](https://github.com/phinze/homebrew-cask) installed you can run ```brew cask install pdftk```
+* To install PDFtk use [the official installer](http://www.pdflabs.com/tools/pdftk-server/) or if you have [homebrew-cask](https://github.com/phinze/homebrew-cask) installed you can run ```brew install pdftk --cask```
 
 ### Install on Ubuntu
 ```sudo apt-get install pdftk```
